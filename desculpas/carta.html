@@ -1,9 +1,23 @@
-<!DOCTYPE html>
-<html lang="pt-br" >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="UTF-8">
-  <title>Uma Carta Para Você</title>
-  <link rel="stylesheet" href="style.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Um Pedido de Desculpas</title>
+<link href="css/default.css" type="text/css" rel="stylesheet">
+<style>
+    #start-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: #ffe; display: flex; justify-content: center;
+        align-items: center; flex-direction: column; z-index: 9999;
+        text-align: center; font-family: sans-serif; color: #555;
+    }
+    #start-button {
+        font-weight: 800; background: transparent; border: solid 2px #ff5757;
+        border-radius: 5px; color: #ff5757; font-size: 20px;
+        padding: 15px 30px; cursor: pointer; transition: all 0.3s; margin-top: 20px;
+    }
+    #start-button:hover { background-color: #fc9d9d; color: #a10000; }
+</style>
 </head>
 <body>
 
@@ -12,277 +26,71 @@
   Seu navegador não suporta o elemento de áudio.
 </audio>
 
-<div class="envlope-wrapper">
-    <div id="envelope" class="close">
-        <div class="front flap"></div>
-        <div class="front pocket"></div>
-        <div class="letter">
-            <div class="words line1"></div>
-            <div class="words line2">Eu preciso te dizer</div>
-            <div class="words line3">algo importante...</div>
-            <div class="words line4"></div>
-        </div>
-        <div class="hearts">
-            <div class="heart a1"></div>
-            <div class="heart a2"></div>
-            <div class="heart a3"></div>
-        </div>
-    </div>
+<div id="start-overlay">
+  <h1>Um momento...</h1>
+  <p>Para a melhor experiência, a música precisa da sua permissão.</p>
+  <button id="start-button">Clique para Iniciar</button>
 </div>
 
-<div class="reset">
-    <button id="open">Abrir</button>
+<div id="mainDiv" style="display: none;">
+	<div id="content">
+		<div id="code">
+<span class="space"/><span class="comments">* Eu sei que palavras não bastam,</span><br />
+<span class="space"/><span class="comments">* então quis criar algo pra te mostrar</span><br />
+<span class="space"/><span class="comments">* o tamanho do meu arrependimento.</span><br />
+<span class="space"/><span class="comments">* O que eu fiz foi errado, impulsivo e uma completa quebra de confiança.</span><br />
+<span class="space"/><span class="comments">* Você é importante demais pra mim, e a ideia de ter estragado as coisas entre a gente dói de verdade.</span><br />
+
+		</div>
+		<div id="loveHeart">
+			<canvas id="garden"></canvas>
+			<div id="words">
+				<div id="messages"></div>
+				<div id="loveu">
+					<div class="question">Você aceita minhas desculpas?</div>
+					<div class="buttons">
+                        <button id="sim">Sim</button>
+                        <button id="nao">Não</button>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-<script src="script.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="js/garden.js"></script>
+<script src="js/functions.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#start-button').on('click', function() {
+            $('#minhaMusica')[0].play();
+            $('#start-overlay').fadeOut(function() {
+                $('#mainDiv').fadeIn(function() {
+                    // 1. Prepara o jardim e o canvas
+                    setupGarden();
+                    // 2. Define as variáveis globais de posicionamento
+                    window.offsetX = $("#loveHeart").width() / 2;
+                    window.offsetY = $("#loveHeart").height() / 2 - 55;
+                    // 3. Inicia as animações
+                    startHeartAnimation();
+                    $("#code").typewriter();
+                });
+            });
+        });
+
+        $('#nao').on('mouseover', function() {
+            var maxX = $(window).width() - $(this).width();
+            var maxY = $(window).height() - $(this).height();
+            $(this).css({ 'position': 'absolute', 'left': Math.random() * maxX, 'top': Math.random() * maxY, 'transition': 'all 0.3s ease' });
+        });
+
+        $('#sim').on('click', function() {
+            $('#loveu').html('<div class="question">Obrigado por me desculpar!</div>');
+        });
+    });
+</script>
 
 </body>
 </html>
-
-
-<style>
-body{
-  font-family: 'Dancing Script', cursive;
-  background-color: #f7d9da;
-}
-
-#envelope {
-  position: relative;
-  width: 280px;
-  height: 180px;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  margin-left: auto;
-  margin-right: auto;
-  top: 150px;
-  background-color: #f9c5c8;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-.front {
-  position: absolute;
-  width: 0;
-  height: 0;
-  z-index: 3;
-}
-
-.flap {
-  border-left: 140px solid transparent;
-  border-right: 140px solid transparent;
-  border-bottom: 82px solid transparent;
-  border-top: 98px solid #ff3333;
-  transform-origin: top;
-  pointer-events: none;
-}
-
-.pocket {
-  border-left: 140px solid #ff9999;
-  border-right: 140px solid #ff9999;
-  border-bottom: 90px solid #fd8787;
-  border-top: 90px solid transparent;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-}
-
-.letter {
-  position: relative;
-  background-color: #fff0f0;
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  height: 90%;
-  top: 5%;
-  border-radius: 6px;
-  box-shadow: 0 2px 26px rgba(0, 0, 0, 0.12);
-}
-
-.letter:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0) 25%, rgba(239, 215, 239, 0.7) 90%, #eed7ef 100%);
-  border-radius: 6px;
-}
-
-.words {
-  position: absolute;
-  left: 10%;
-  width: 80%;
-  height: 14%;
-  background-color: #f9c5c8;
-  text-align: center;
-  font-size: 18px;
-  color: #582424;
-}
-
-.words.line1 {
-  top: 15%;
-  width: 80%;
-  height: 7%;
-}
-
-.words.line2 {
-  top: 30%;
-  height: 20%;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.words.line3 {
-  top: 55%;
-  height: 20%;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.words.line4 {
-  top: 72%;
-}
-
-.open .flap {
-  transform: rotateX(180deg);
-  transition: transform 0.4s ease, z-index 0.6s;
-  z-index: 1;
-}
-
-.close .flap {
-  transform: rotateX(0deg);
-  transition: transform 0.4s 0.6s ease, z-index 1s;
-  z-index: 5;
-}
-
-.close .letter {
-  transform: translateY(0px);
-  transition: transform 0.4s ease, z-index 1s;
-  z-index: 1;
-}
-
-.open .letter {
-  z-index: 2;
-}
-
-.hearts {
-  position: absolute;
-  top: 90px;
-  left: 0;
-  right: 0;
-  z-index: 2;
-}
-
-.heart {
-  position: absolute;
-  bottom: 0;
-  right: 10%;
-  pointer-events: none;
-}
-
-.heart:before,
-.heart:after {
-  position: absolute;
-  content: "";
-  left: 50px;
-  top: 0;
-  width: 50px;
-  height: 80px;
-  background: #D00000;
-  border-radius: 50px 50px 0 0;
-  transform: rotate(-45deg);
-  transform-origin: 0 100%;
-  pointer-events: none;
-}
-
-.heart:after {
-  left: 0;
-  transform: rotate(45deg);
-  transform-origin: 100% 100%;
-}
-
-.close .heart {
-  opacity: 0;
-  animation: none;
-}
-
-.a1 {
-  left: 20%;
-  transform: scale(0.6);
-  opacity: 1;
-  animation: slideUp 4s linear 1, sideSway 2s ease-in-out 4 alternate;
-  animation-fill-mode: forwards;
-  animation-delay: 0.7s;
-}
-
-.a2 {
-  left: 55%;
-  transform: scale(1);
-  opacity: 1;
-  animation: slideUp 5s linear 1, sideSway 4s ease-in-out 2 alternate;
-  animation-fill-mode: forwards;
-  animation-delay: 0.7s;
-}
-
-.a3 {
-  left: 10%;
-  transform: scale(0.8);
-  opacity: 1;
-  animation: slideUp 7s linear 1, sideSway 2s ease-in-out 6 alternate;
-  animation-fill-mode: forwards;
-  animation-delay: 0.7s;
-}
-
-@keyframes slideUp {
-  0% {
-    top: 0;
-  }
-  100% {
-    top: -600px;
-  }
-}
-
-@keyframes sideSway {
-  0% {
-    margin-left: 0px;
-  }
-  100% {
-    margin-left: 50px;
-  }
-}
-
-.envlope-wrapper {
-  height: 380px;
-}
-
-.reset {
-  text-align: center;
-}
-
-.reset button {
-  font-weight: 800;
-  transition: all 0.1s linear;
-  -webkit-appearance: none;
-  background-color: transparent;
-  border: solid 2px #ff5757;
-  border-radius: 4px;
-  color: #ff5757;
-  display: inline-block;
-  font-size: 14px;
-  text-transform: uppercase;
-  margin: 5px;
-  padding: 10px;
-  line-height: 1em;
-  text-decoration: none;
-  min-width: 120px;
-  cursor: pointer;
-}
-
-.reset button:hover {
-  background-color: #fc9d9d;
-  color: #a10000;
-}
-</style>

@@ -14,7 +14,7 @@ $(document).ready(function() {
         setTimeout(function() {
             // Salva o tempo atual da música antes de redirecionar
             sessionStorage.setItem('musicCurrentTime', musica.currentTime);
-            window.location.href = 'index.html';
+            window.location.href = 'carta.html';
         }, 2500);
     }
 });

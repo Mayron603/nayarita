@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Um Pedido de Desculpas</title>
+<link href="css/default.css" type="text/css" rel="stylesheet">
+<style>
+    #start-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: #ffe; display: flex; justify-content: center;
+        align-items: center; flex-direction: column; z-index: 9999;
+        text-align: center; font-family: sans-serif; color: #555;
+    }
+    #start-button {
+        font-weight: 800; background: transparent; border: solid 2px #ff5757;
+        border-radius: 5px; color: #ff5757; font-size: 20px;
+        padding: 15px 30px; cursor: pointer; transition: all 0.3s; margin-top: 20px;
+    }
+    #start-button:hover { background-color: #fc9d9d; color: #a10000; }
+</style>
+</head>
+<body>
+
+<audio id="minhaMusica" loop>
+  <source src="sua_musica.mp3" type="audio/mpeg">
+  Seu navegador não suporta o elemento de áudio.
+</audio>
+
+<div id="start-overlay">
+  <h1>Um momento...</h1>
+  <p>Para a melhor experiência, a música precisa da sua permissão.</p>
+  <button id="start-button">Clique para Iniciar</button>
+</div>
+
+<div id="mainDiv" style="display: none;">
+	<div id="content">
+		<div id="code">
+<span class="space"/><span class="comments">* Eu sei que palavras não bastam,</span><br />
+<span class="space"/><span class="comments">* então quis criar algo pra te mostrar</span><br />
+<span class="space"/><span class="comments">* o tamanho do meu arrependimento.</span><br />
+<span class="space"/><span class="comments">* O que eu fiz foi errado, impulsivo e uma completa quebra de confiança.</span><br />
+<span class="space"/><span class="comments">* Você é importante demais pra mim, e a ideia de ter estragado as coisas entre a gente dói de verdade.</span><br />
+
+		</div>
+		<div id="loveHeart">
+			<canvas id="garden"></canvas>
+			<div id="words">
+				<div id="messages"></div>
+				<div id="loveu">
+					<div class="question">Você aceita minhas desculpas?</div>
+					<div class="buttons">
+                        <button id="sim">Sim</button>
+                        <button id="nao">Não</button>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="js/garden.js"></script>
+<script src="js/functions.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#start-button').on('click', function() {
+            $('#minhaMusica')[0].play();
+            $('#start-overlay').fadeOut(function() {
+                $('#mainDiv').fadeIn(function() {
+                    // 1. Prepara o jardim e o canvas
+                    setupGarden();
+                    // 2. Define as variáveis globais de posicionamento
+                    window.offsetX = $("#loveHeart").width() / 2;
+                    window.offsetY = $("#loveHeart").height() / 2 - 55;
+                    // 3. Inicia as animações
+                    startHeartAnimation();
+                    $("#code").typewriter();
+                });
+            });
+        });
+
+        $('#nao').on('mouseover', function() {
+            var maxX = $(window).width() - $(this).width();
+            var maxY = $(window).height() - $(this).height();
+            $(this).css({ 'position': 'absolute', 'left': Math.random() * maxX, 'top': Math.random() * maxY, 'transition': 'all 0.3s ease' });
+        });
+
+        $('#sim').on('click', function() {
+            $('#loveu').html('<div class="question">Obrigado por me desculpar!</div>');
+        });
+    });
+</script>
+
+</body>
+</html>
